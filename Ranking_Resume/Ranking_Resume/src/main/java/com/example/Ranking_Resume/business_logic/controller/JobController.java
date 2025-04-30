@@ -2,6 +2,7 @@ package com.example.Ranking_Resume.business_logic.controller;
 
 import com.example.Ranking_Resume.business_logic.dto.JobRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class JobController {
     private final JobServiceImpl jobService;
 
-    @PostMapping("")
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Job> CreateJobWithResumes(
             @RequestPart("job")JobRequest jobRequest,
             @RequestPart("resumes")MultipartFile[] resumes,

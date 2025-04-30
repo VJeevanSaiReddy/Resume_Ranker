@@ -73,9 +73,20 @@ public class AuthService {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(actualUsername);
         return jwtService.generateToken(userDetails);
     }
-    public void deleteUser(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        userRepository.delete(user);
+    public boolean deleteUser(String username) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isPresent()) {
+            userRepository.delete(userOpt.get());
+            return true;
+        }
+        return false;
+    }
+    public boolean deleteUnactivatedUserByActivationCode(String code) {
+        Optional<User> userOpt = userRepository.findByActivationCode(code);
+        if (userOpt.isPresent() && !userOpt.get().isEnabled()) {
+            userRepository.delete(userOpt.get());
+            return true;
+        }
+        return false;
     }
 }

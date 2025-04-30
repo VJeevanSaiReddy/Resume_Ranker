@@ -5,6 +5,7 @@ import com.example.Ranking_Resume.dto.SignupRequest;
 import com.example.Ranking_Resume.dto.LoginRequest;
 import com.example.Ranking_Resume.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,10 +37,26 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteUser(
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        authService.deleteUser(userDetails.getUsername());
-        return ResponseEntity.ok("Account deleted successfully");
+    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: No user logged in");
+        }
+        try {
+            authService.deleteUser(userDetails.getUsername());
+            return ResponseEntity.ok("Account deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
+
+    @DeleteMapping("/delete-unactivated")
+    public ResponseEntity<String> deleteUnactivatedUser(@RequestParam String activation_code) {
+        boolean deleted = authService.deleteUnactivatedUserByActivationCode(activation_code);
+        if (deleted) {
+            return ResponseEntity.ok("Unactivated account deleted successfully");
+        } else {
+            return ResponseEntity.status(404).body("Invalid or already activated code");
+        }
+    }
+
 }

@@ -38,5 +38,5 @@ logging:
 application:
   security:
     jwt:
-      secret-key: YW55IHJhbmRvbSBzdHJpbmcgd2lsbCB3b3JrIGhlcmU= # base64 encoded secret
-      expiration: 86400000 # 24 hours in milliseconds
+      secret-key: YW55IHJhbmRvbSBzdHJpbmcgd2lsbCB3b3JrIGhlcmU=
+      expiration: 86400000

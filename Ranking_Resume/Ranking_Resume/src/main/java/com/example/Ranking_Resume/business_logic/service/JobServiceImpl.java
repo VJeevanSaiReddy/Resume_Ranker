@@ -8,6 +8,7 @@ import com.example.Ranking_Resume.business_logic.repository.JobRepository;
 import com.example.Ranking_Resume.business_logic.repository.ResumeRepository;
 import com.example.Ranking_Resume.entity.User;
 import com.example.Ranking_Resume.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class JobServiceImpl {
     private final JobRepository jobRepository;
     private final ResumeRepository resumeRepository;
