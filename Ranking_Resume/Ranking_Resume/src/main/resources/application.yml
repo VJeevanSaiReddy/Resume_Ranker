@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/resumeranker
     username: root
-    password: Jeevan@01112003
+    password: 
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -20,13 +20,17 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: welcome2bunny@gmail.com
-    password: urxw zjew nuzv hlxj
+    password:
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
 
 logging:
   level:

@@ -1,7 +1,7 @@
 package com.example.Ranking_Resume.business_logic.service;
 
-
 import com.example.Ranking_Resume.business_logic.dto.JobRequest;
+import com.example.Ranking_Resume.business_logic.dto.JobResponse; // <-- Import this!
 import com.example.Ranking_Resume.business_logic.entity.Job;
 import com.example.Ranking_Resume.business_logic.entity.Resume;
 import com.example.Ranking_Resume.business_logic.repository.JobRepository;
@@ -25,13 +25,13 @@ public class JobServiceImpl {
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
 
-    public Job createJobWithResumes(
-        JobRequest jobRequest,
-        MultipartFile[] resumes,
-        String username
+    public JobResponse createJobWithResumes(
+            JobRequest jobRequest,
+            MultipartFile[] resumes,
+            String username
     ){
-        User user=userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found: "+ username));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
         Job job = Job.builder()
                 .title(jobRequest.getTitle())
                 .description(jobRequest.getDescription())
@@ -55,6 +55,16 @@ public class JobServiceImpl {
         resumeRepository.saveAll(resumeList);
         job.setResumes(resumeList);
 
-        return job;
+        // Build JobResponse DTO
+        List<String> resumeFileNames = resumeList.stream()
+                .map(Resume::getFileName)
+                .toList();
+
+        return new JobResponse(
+                job.getId(),
+                job.getTitle(),
+                job.getDescription(),
+                resumeFileNames
+        );
     }
 }

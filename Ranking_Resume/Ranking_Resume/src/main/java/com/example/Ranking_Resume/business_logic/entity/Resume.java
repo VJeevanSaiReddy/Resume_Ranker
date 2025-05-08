@@ -1,6 +1,8 @@
 package com.example.Ranking_Resume.business_logic.entity;
 
 import com.example.Ranking_Resume.entity.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,12 +21,14 @@ public class Resume {
     private String fileName;
 
     @Lob
+    @JsonIgnore
     private byte[] data;
 
     private Double score;
 
     @ManyToOne
     @JoinColumn(name = "job_id")
+    @JsonBackReference
     private Job job;
 
     @ManyToOne
